@@ -43,6 +43,8 @@ deb http://archive.ubuntu.com/ubuntu precise main universe
 deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse
 EOF
 
+sudo rm /opt/ubuntu-root/etc/apt/sources.list
+
 schroot -u root -c ubuntu -d / -- apt-get update
 
 ################################################################
