@@ -1,0 +1,58 @@
+#!/bin/bash
+
+################################################################
+#install prereqisits
+sudo apt-get install debootstrap Xephyr schroot 
+
+################################################################
+#patch debootstrap, to allow install of ubuntu 12
+sudo ln -s -T gusty /usr/share/debootstrap/scripts/precise
+
+################################################################
+#install ubuntu 12 into a subdirectory
+
+sudo mkdir /opt/ubuntu-root
+sudo /usr/sbin/debootstrap --arch i386 precise /opt/ubuntu-root http://archive.ubuntu.com/ubuntu
+
+################################################################
+#configure ubuntu, to allow install from backport
+
+sudo cat >/opt/ubuntu-root/etc/apt/preferences.d/my-preferences <<EOF
+Package: *
+Pin: release a=precise-backports
+Pin-Priority: 100
+EOF
+
+sudo cat >/opt/ubuntu-root/etc/apt/sources.list.d/my.list <<EOF
+deb http://archive.ubuntu.com/ubuntu precise main universe
+deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse
+EOF
+
+################################################################
+#configure schroot
+
+sudo cat >> /etc/schroot/schroot.conf <<EOF
+[ubuntu]
+description=Ubuntu
+type=directory
+directory=/opt/ubuntu-root
+users=$USERNAME,david
+groups=
+root-users=$USERNAME
+root-groups=
+aliases=
+EOF
+
+################################################################
+#install scratch in ubuntu directory
+
+schroot -u root -c ubuntu -d / -- apt-get install scratch
+
+
+
+
+
+
+
+
+
