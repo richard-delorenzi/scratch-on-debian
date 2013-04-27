@@ -50,7 +50,7 @@ schroot -u root -c ubuntu -d / -- apt-get update
 ################################################################
 #install scratch in ubuntu directory
 
-schroot -u root -c ubuntu -d / -- apt-get install scratch
+schroot -u root -c ubuntu -d / -- apt-get -y install scratch
 
 
 
