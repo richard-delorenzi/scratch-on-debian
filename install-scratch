@@ -15,23 +15,9 @@ sudo mkdir /opt/ubuntu-root
 sudo /usr/sbin/debootstrap --arch i386 precise /opt/ubuntu-root http://archive.ubuntu.com/ubuntu
 
 ################################################################
-#configure ubuntu, to allow install from backport
-
-sudo cat >/opt/ubuntu-root/etc/apt/preferences.d/my-preferences <<EOF
-Package: *
-Pin: release a=precise-backports
-Pin-Priority: 100
-EOF
-
-sudo cat >/opt/ubuntu-root/etc/apt/sources.list.d/my.list <<EOF
-deb http://archive.ubuntu.com/ubuntu precise main universe
-deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse
-EOF
-
-################################################################
 #configure schroot
 
-sudo cat >> /etc/schroot/schroot.conf <<EOF
+cat <<EOF | sudo tee -a /etc/schroot/schroot.conf >> /dev/null
 [ubuntu]
 description=Ubuntu
 type=directory
@@ -41,6 +27,20 @@ groups=
 root-users=$USERNAME
 root-groups=
 aliases=
+EOF
+
+################################################################
+#configure ubuntu, to allow install from backport
+
+cat <<EOF | sudo tee /opt/ubuntu-root/etc/apt/preferences.d/my-preferences >/dev/null
+Package: *
+Pin: release a=precise-backports
+Pin-Priority: 100
+EOF
+
+cat <<EOF | sudo tee /opt/ubuntu-root/etc/apt/sources.list.d/my.list >/dev/null
+deb http://archive.ubuntu.com/ubuntu precise main universe
+deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse
 EOF
 
 ################################################################
