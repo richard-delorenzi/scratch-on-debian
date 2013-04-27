@@ -1,0 +1,37 @@
+#!/bin/bash
+
+self=$0
+number_of_args=$#
+new_display=:$(expr $(echo $DISPLAY | sed -re "s/^:([0-9]+).?[0-9]*/\1/") + 100)
+name_of_window=/usr/share/scratch/Scratch.image
+
+root_size=$(xwininfo -root | sed -nre "s/[[:blank:]]*-geometry *([0-9]+)x([0-9]+)[+-][0-9]+[+-][0-9]+/\1,\2/p")
+x=$(echo $root_size | cut -d, -f1)
+y=$(echo $root_size | cut -d, -f2)
+echo size= $x $y
+#some problems with multi-monitor systems so kludge it.
+x=1366
+y=768
+
+function my_xwait() {
+    while ! xwininfo -name $1 1>/dev/null 2>/dev/null
+    do 
+        sleep 0.01
+    done
+}
+
+if [ $number_of_args == 0 ]
+then
+    echo display = $new_display
+    xinit $self $new_display -- /usr/bin/Xephyr $new_display -fullscreen
+else
+    export DISPLAY=$1
+    echo DISPLAY = $DISPLAY
+    (
+        my_xwait $name_of_window
+        xwit -all -resize $x $y
+    )&
+    schroot -c ubuntu  -d $HOME --  bash -c "DISPLAY=$DISPLAY scratch" 
+fi
+
+
