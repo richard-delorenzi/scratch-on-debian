@@ -43,6 +43,8 @@ deb http://archive.ubuntu.com/ubuntu precise main universe
 deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse
 EOF
 
+schroot -u root -c ubuntu -d / -- apt-get update
+
 ################################################################
 #install scratch in ubuntu directory
 
