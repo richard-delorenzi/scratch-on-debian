@@ -2,7 +2,7 @@
 
 ################################################################
 #install prereqisits
-sudo apt-get install debootstrap Xephyr schroot 
+sudo apt-get install debootstrap xserver-xephyr schroot 
 
 ################################################################
 #patch debootstrap, to allow install of ubuntu 12
