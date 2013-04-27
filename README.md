@@ -1,4 +1,4 @@
 scratch-on-debian
 =================
 
-Scripts to get the Scratch visual programming language working on Debian, using chroot.
+Scripts to get the [Scratch](http://scratch.mit.edu/), visual programming language, working on Debian (using chroot). 
